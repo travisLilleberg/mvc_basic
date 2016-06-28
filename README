@@ -1,0 +1,74 @@
+
+This is a basic MVC Framework designed by Travis Lilleberg for general use.
+
+@author Travis Lilleberg <traviswlilleberg@gmail.com>
+@date July-August 2015
+
+
+/******** USAGE ********/
+
+There is an 'Example' controller and four 'example' views to illustrate
+how to work in this environment. You should read general instructions
+on how to work within MVC as well.
+
+
+/******** FILE STRUCTURE ********/
+
+404.html ----- our 404 page.
+.htaccess ---- reroutes all requests to index.php
+index.php ---- our single access point to the site (see process below)
+README ------- hi
+config ------- contains config.php, which defines our database credentials
+               and other environment-specific settings.
+core --------- any non-class scripts that run on every request (bootstrap.php)
+lib ---------- any classes that we use on every request
+dist --------- our javascript, css, and images
+application -- our models, views and controllers (see process)
+logs --------- error logs 
+
+
+/******** PROCESS ********/
+
+This site works like so:
+
+1. The request comes in like this:
+   slis.simmons.edu/usability/search/query/china?extra=params
+   NOTE: The parts of the url represent:
+      domain/root/controller/action/queryString?advancedSearchParams
+
+2. The .htaccess file rewrites url like this:
+   slis.simmons.edu/usability/index.php?url=search/query/china&extra=params
+   NOTE: All requests get sent to index.php .
+   NOTE: The controller, action, queryString are part of the 'url' parameter.
+
+3. index.php defines the site's ROOT directory and loads core/bootstrap.php
+
+4. bootstrap.php does a bunch of stuff, it:
+   4.1 Loads config/config.php, which includes our DB credentials.
+   4.2 Defines our error handling.
+   4.3 Loads all files in lib.
+   4.4 Defines our 404 function.
+   4.5 Pulls 'url' out of $_GET and passes $url and $_GET to Router::route
+
+5. Router::route does the following:
+   5.1 Reads the url parameter: "search/query/china".
+   5.2 Loads application/controllers/Search.php
+   5.3 Creates new Search() object.
+   5.4 Loads any extra parameters from $_GET into the new object.
+   5.5 Calls Search::query("china").
+
+6. The Search controller does the following:
+   6.1 Creates a new Model object.
+      NOTE: The Model allows us to connect to the database.
+   6.2 Performs the database query using the Model object.
+   6.3 Creates a new View object.
+   6.4 Passes all parameters to the view object.
+      NOTE: This includes database query results.
+   6.5 Runs View::loadView() multiple times.
+
+7. View::loadView does the following:
+   6.1 Redefines all our parameters as local variables.
+   6.2 Loads a specific template from application/views/ .
+      NOTE: This is done multiple times, to call: header, content, footer, etc
+
+That's it! So simple!

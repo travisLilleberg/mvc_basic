@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ *
+ * Sets configuration variables, which change between environments.
+ */
+
+/** Development Environment **/
+// when Set to false, no error will be throw out, but saved in temp/log.txt file.
+define ('DEVELOPMENT_ENVIRONMENT', FALSE);
+
+/** Site Root **/
+// Domain name of the site (no slash at the end!)
+//define('SITE_ROOT' , ‘http://Your domain name');
+define('SITE_ROOT' , '');
+
+/** Routing Defaults */
+define ('DEFAULT_CONTROLLER', "index");
+define ('DEFAULT_ACTION', "index");
+
+/** DB */
+define('DB_HOST', '');
+define('DB_USER', '');
+define('DB_PASS', '');
+define('DB_NAME', '');
